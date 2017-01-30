@@ -1,10 +1,10 @@
 <template lang="html">
   <md-toolbar>
-    <md-button class="md-icon-button"
+    <!-- <md-button class="md-icon-button"
       v-show="!hideMenu"
       @click="toggleSidenav">
       <md-icon>menu</md-icon>
-    </md-button>
+    </md-button> -->
 
     <h2 class="md-title"
       style="flex: 1">

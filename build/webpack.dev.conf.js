@@ -5,6 +5,7 @@ var utils = require('./utils')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var FriendlyErrors = require('friendly-errors-webpack-plugin')
+var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -31,6 +32,18 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
-    new FriendlyErrors()
+    new FriendlyErrors(),
+    new SWPrecacheWebpackPlugin(
+      {
+        cacheId: 'busapp-pwa-v2',
+        filename: 'busapp-pwa-worker.js',
+        maximumFileSizeToCacheInBytes: 4194304,
+        minify: true,
+        runtimeCaching: [{
+          handler: 'cacheFirst',
+          urlPattern: /[.]mp3$/,
+        }],
+      }
+    ),
   ]
 })

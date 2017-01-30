@@ -2,6 +2,7 @@ import VueRouter from 'vue-router';
 
 import Home from '../spa/Home';
 import Map from '../spa/map/Map';
+import Form from '../spa/route/Form';
 import NotFound from '../spa/NotFound';
 
 /* eslint-disable import/prefer-default-export */
@@ -15,6 +16,11 @@ export const routes = [
         path: 'map',
         name: 'map',
         component: Map,
+      },
+      {
+        path: 'form',
+        name: 'form',
+        component: Form,
       },
     ],
   },
