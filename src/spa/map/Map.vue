@@ -16,11 +16,6 @@
         </md-input-container>
 
         <md-input-container>
-          <label>Description</label>
-          <md-input v-model="newEntity.description"></md-input>
-        </md-input-container>
-
-        <md-input-container>
           <label>Latitude</label>
           <md-input v-model="newEntity.position[0].lat"></md-input>
         </md-input-container>
@@ -68,11 +63,10 @@
       return {
         orionResources: orionResource(this.$resource),
         newEntity: {
-          id: '',
-          name: '',
-          description: '',
+          id: 'T131',
+          name: 'test T131',
           position: [
-            { lat: 0, lon: 0 },
+            { lat: -18.232, lon: 42.123 },
           ],
         },
         center: {
@@ -99,7 +93,9 @@
       closeCreateDialog(ref) {
         const id = this.newEntity.id;
 
-        this.orionResources.post({ id })
+        this.orionResources.post( {
+          options: 'keyValues',
+        }, this.newEntity)
           .then((doc) => {
             this.entities.push(doc.data);
             this.center = doc.data.position;
