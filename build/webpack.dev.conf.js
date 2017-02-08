@@ -33,17 +33,17 @@ module.exports = merge(baseWebpackConfig, {
       inject: true
     }),
     new FriendlyErrors(),
-    new SWPrecacheWebpackPlugin(
-      {
-        cacheId: 'busapp-pwa-v2',
-        filename: 'busapp-pwa-worker.js',
-        maximumFileSizeToCacheInBytes: 4194304,
-        minify: true,
-        runtimeCaching: [{
-          handler: 'cacheFirst',
-          urlPattern: /[.]mp3$/,
-        }],
-      }
-    ),
+    // new SWPrecacheWebpackPlugin(
+    //   {
+    //     cacheId: 'busapp-pwa-v2',
+    //     filename: 'busapp-pwa-worker.js',
+    //     maximumFileSizeToCacheInBytes: 4194304,
+    //     minify: true,
+    //     runtimeCaching: [{
+    //       handler: 'cacheFirst',
+    //       urlPattern: /[.]mp3$/,
+    //     }],
+    //   }
+    // ),
   ]
 })

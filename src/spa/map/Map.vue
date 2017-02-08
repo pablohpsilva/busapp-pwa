@@ -59,9 +59,11 @@
   import { orionResource } from '../../common/resources/orion';
 
   export default {
+    name: 'Map',
     data() {
       return {
         orionResources: orionResource(this.$resource),
+        globalIndex: 0,
         newEntity: {
           id: 'T131',
           name: 'test T131',
@@ -78,9 +80,15 @@
     },
     computed: {
       markers() {
-        return this.entities.length ?
-          this.entities.map(el => ({ position: el.position[0] })) :
-        [
+        if (this.entities.length) {
+          const a = this.entities
+            .filter(el => el.hasOwnProperty('position'))
+            .map(el => el.position.value);
+          const b = a.map(el => el)
+            .map(el => ({ position: el[0] }));
+          return b;
+        }
+        return [
           { position: { lat: -18.9176744, lng: -48.2604986 } },
           { position: { lat: -18.9196445, lng: -48.2642169 } },
         ];
@@ -105,6 +113,16 @@
             this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);
           });
       },
+      requestPopulateMap() {
+        this.orionResources.list()
+          .then((docs) => {
+            console.warn(docs);
+            this.entities = docs.data;
+          })
+          .catch((err) => {
+            console.warn(err);
+          });
+      },
       closeDialog(ref) {
         this.$refs[ref].close();
       },
@@ -114,6 +132,9 @@
       onClose(type) {
         console.log('Closed', type);
       },
+    },
+    mounted() {
+      this.requestPopulateMap();
     },
   };
 </script>

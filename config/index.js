@@ -24,7 +24,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/v2': {
-        target: 'http://192.168.99.100:1026/v2',
+        target: 'http://localhost:1026/v2',
         changeOrigin: true,
         pathRewrite: {
           '^/v2': ''
