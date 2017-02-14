@@ -4,12 +4,13 @@
       :title="pageName"
       v-on:TOGGLE_SIDEBAR="toggleSidenav"></toolbar>
 
-    <keep-alive>
+    <!-- <keep-alive>
       <transition name="slide-fade"
         mode="out-in">
         <router-view></router-view>
       </transition>
-    </keep-alive>
+    </keep-alive> -->
+    <map-g></map-g>
 
     <sidebar ref="sidenav"></sidebar>
   </div>
@@ -18,10 +19,12 @@
 <script>
   import Sidebar from '../shared-components/Sidebar';
   import Toolbar from '../shared-components/Toolbar';
+  import MapG from './map/Map';
 
   export default {
     name: 'Home',
     components: {
+      MapG,
       Sidebar,
       Toolbar,
     },

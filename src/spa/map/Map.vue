@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-
     <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
       <md-dialog-title>Create new note</md-dialog-title>
 
@@ -40,7 +39,7 @@
       :center="center"
       :zoom="14">
       <gmap-marker
-        v-if="markers && markers.length"
+        v-if="markers && markers.length && markers[0].hasOwnProperty('position')"
         v-for="m in markers"
         :position="m.position"
         :clickable="true"
@@ -49,9 +48,9 @@
       ></gmap-marker>
     </gmap-map>
 
-    <md-button class="md-fab floating-button" id="fab" @click="openDialog('dialog2')">
+    <!-- <md-button class="md-fab floating-button" id="fab" @click="openDialog('dialog2')">
       <md-icon>add</md-icon>
-    </md-button>
+    </md-button> -->
   </div>
 </template>
 
@@ -141,20 +140,22 @@
       };
     },
     computed: {
+      // entityMarkers() {
+      //   return (this.entities.length && this.entities[0]) ?
+      //   this.entities[0]:
+      //   (window.localStorage.getItem('busLocations')) ?
+      //     JSON.parse(window.localStorage.getItem('busLocations'))[0] :
+      //     [];
+      // },
+      // markers() {
+      //   return (this.globalIndex !== -1 && this.entityMarkers && !this.entityMarkers.hasOwnProperty('length')) ?
+      //     [this.entityMarkers.position[this.globalIndex]] :
+      //     [];
+      // },
       markers() {
-        // if (this.entities.length) {
-        //   const a = this.entities
-        //     .filter(el => el.hasOwnProperty('position'))
-        //     .map(el => el.position.value);
-        //   const b = a.map(el => el)
-        //     .map(el => ({ position: el[0] }));
-        //   return b;
-        // }
-        // return [
-        //   { position: { lat: -18.9176744, lng: -48.2604986 } },
-        //   { position: { lat: -18.9196445, lng: -48.2642169 } },
-        // ];
-        return [{ position: this.newEntity.position[this.globalIndex] }];
+        return (this.entities.length && this.entities[0].position[this.globalIndex]) ?
+          [this.entities[0].position[this.globalIndex]]:
+          [];
       },
     },
     watch: {
@@ -187,11 +188,14 @@
       requestPopulateMap() {
         this.orionResources.list()
           .then((docs) => {
-            console.warn(docs);
-            this.entities = docs.data;
+            this.entities = this.processOrionEntity(docs.data);
+            window.localStorage.setItem('busLocations', JSON.stringify(this.entities));
           })
           .catch((err) => {
             console.warn(err);
+            this.entities = (window.localStorage.getItem('busLocations')) ?
+              JSON.parse(window.localStorage.getItem('busLocations')) :
+              [];
           });
       },
       closeDialog(ref) {
@@ -203,10 +207,40 @@
       onClose(type) {
         console.log('Closed', type);
       },
+      processOrionEntity(entities) {
+        return entities.map(el => {
+          const obj = {};
+          obj.id = el.id;
+          obj.name = el.name.value;
+          obj.position = this.processOrionEntityPosition(el.position.value);
+          return obj;
+        });
+      },
+      processOrionEntityPosition(positions) {
+        return positions.map(el => ({ position: el }));
+      },
+      saveBusRoute() {
+        this.orionResources.post(
+          {
+            options: 'keyValues',
+          },
+          this.newEntity)
+          .then((doc) => {
+            this.entities.push(doc.data);
+            this.center = doc.data.position;
+            this.closeDialog(ref);
+          })
+          .catch((err) => {
+            this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);
+          });
+      },
       moveMarker() {
         setInterval(() => {
-          if (this.globalIndex > this.newEntity.position.length - 1) {
-            this.newEntity.position = this.newEntity.position.reverse();
+          if (!this.entities.length) {
+            return;
+          }
+          if (this.globalIndex === this.entities[0].position.length - 1) {
+            this.entities[0].position = this.entities[0].position.reverse();
             this.globalIndex = -1;
           }
           this.globalIndex += 1;
@@ -216,6 +250,7 @@
     mounted() {
       this.requestPopulateMap();
       this.moveMarker();
+      this.saveBusRoute();
     },
   };
 </script>

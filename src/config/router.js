@@ -10,7 +10,6 @@ export const routes = [
   {
     path: '/',
     component: Home,
-    redirect: '/map',
     children: [
       {
         path: 'map',
@@ -23,10 +22,6 @@ export const routes = [
         component: Form,
       },
     ],
-  },
-  {
-    path: '*',
-    component: NotFound,
   },
 ];
 
