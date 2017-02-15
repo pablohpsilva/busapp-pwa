@@ -1,4 +1,5 @@
-const basePath = '/v2/entities';
+// const basePath = '/v2/entities';
+const basePath = 'http://67.205.174.57:1026/v2/entities';
 
 const orionActions = {
   list: { method: 'GET', url: `${basePath}` },

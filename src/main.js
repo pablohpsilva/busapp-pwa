@@ -24,4 +24,4 @@ new Vue({ // eslint-disable-line no-new
   el: '#app',
   template: '<App/>',
   components: { App },
-});
+}).$mount();

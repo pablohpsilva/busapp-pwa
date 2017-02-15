@@ -8,7 +8,7 @@ import NotFound from '../spa/NotFound';
 /* eslint-disable import/prefer-default-export */
 export const routes = [
   {
-    path: '/',
+    path: '/busapp-pwa',
     component: Home,
     children: [
       {
@@ -23,6 +23,10 @@ export const routes = [
       },
     ],
   },
+  // {
+  //   path: '*',
+  //   component: NotFound,
+  // },
 ];
 
 export const VueRouterObject = {

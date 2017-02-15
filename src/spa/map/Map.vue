@@ -189,13 +189,16 @@
         this.orionResources.list()
           .then((docs) => {
             this.entities = this.processOrionEntity(docs.data);
-            window.localStorage.setItem('busLocations', JSON.stringify(this.entities));
+            window.localStorage.setItem('busLocations', JSON.stringify(this.processOrionEntity(docs.data)));
           })
           .catch((err) => {
-            console.warn(err);
-            this.entities = (window.localStorage.getItem('busLocations')) ?
+            console.warn('requestPopulateMap error', err);
+            const aux = (window.localStorage.getItem('busLocations')) ?
               JSON.parse(window.localStorage.getItem('busLocations')) :
-              [];
+              this.processOrionEntity([JSON.parse(JSON.stringify(this.newEntity))]);
+
+            window.aux1 = aux;
+            this.entities = aux;
           });
       },
       closeDialog(ref) {
@@ -211,8 +214,8 @@
         return entities.map(el => {
           const obj = {};
           obj.id = el.id;
-          obj.name = el.name.value;
-          obj.position = this.processOrionEntityPosition(el.position.value);
+          obj.name = el.name.value || el.name;
+          obj.position = this.processOrionEntityPosition(el.position.value || el.position);
           return obj;
         });
       },
