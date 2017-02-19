@@ -7,6 +7,7 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+var StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin')
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -60,6 +61,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
+    new StyleExtHtmlWebpackPlugin(),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -82,7 +84,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new SWPrecacheWebpackPlugin(
       {
-        cacheId: 'busapp-pwa-v2',
+        cacheId: 'busapp-pwa-v3',
         filename: 'busapp-pwa-worker.js',
         maximumFileSizeToCacheInBytes: 4194304,
         minify: true,
