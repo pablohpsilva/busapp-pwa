@@ -1,5 +1,7 @@
 // const basePath = '/v2/entities';
-const basePath = 'http://67.205.174.57:1026/v2/entities';
+const basePath = (process && process.env && process.env.NODE_ENV === 'development') ?
+  '/v2/entities' :
+  'http://67.205.174.57:1026/v2/entities';
 
 const orionActions = {
   list: { method: 'GET', url: `${basePath}` },

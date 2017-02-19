@@ -1,56 +1,18 @@
 <template lang="html">
   <div>
-    <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
-      <md-dialog-title>Create new note</md-dialog-title>
-
-      <md-dialog-content>
-        <md-input-container>
-          <label>Entity ID *</label>
-          <md-input v-model="newEntity.id"></md-input>
-        </md-input-container>
-
-        <md-input-container>
-          <label>Name</label>
-          <md-input v-model="newEntity.name"></md-input>
-        </md-input-container>
-
-        <md-input-container>
-          <label>Latitude</label>
-          <md-input v-model="newEntity.position[0].lat"></md-input>
-        </md-input-container>
-
-        <md-input-container>
-          <label>Longitude</label>
-          <md-input v-model="newEntity.position[0].lon"></md-input>
-        </md-input-container>
-      </md-dialog-content>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog('dialog2')">
-          Cancel
-        </md-button>
-        <md-button class="md-primary" @click="closeCreateDialog('dialog2')">
-          Create
-        </md-button>
-      </md-dialog-actions>
-    </md-dialog>
-
     <gmap-map
       :center="center"
       :zoom="14">
       <gmap-marker
-        v-if="markers && markers.length && markers[0].hasOwnProperty('position')"
+        v-if="showMap && markers && markers.length && markers[0].hasOwnProperty('position')"
         v-for="m in markers"
+        icon="https://s28.postimg.org/xxji5m6y5/bus.png"
         :position="m.position"
         :clickable="true"
         :draggable="true"
         @click="center=m.position"
       ></gmap-marker>
     </gmap-map>
-
-    <!-- <md-button class="md-fab floating-button" id="fab" @click="openDialog('dialog2')">
-      <md-icon>add</md-icon>
-    </md-button> -->
   </div>
 </template>
 
@@ -59,6 +21,12 @@
 
   export default {
     name: 'Map',
+    props: {
+      showMap: {
+        type: Boolean,
+        default() { return false; },
+      },
+    },
     data() {
       return {
         orionResources: orionResource(this.$resource),
@@ -162,7 +130,9 @@
       markers() {
         const center = this.markers[0].position;
         if (center && center.hasOwnProperty('lat') && center.lat) {
-          this.center = center;
+          if (this.showMap) {
+            this.center = center;
+          }
         }
       },
     },
@@ -261,6 +231,7 @@
 <style>
   .vue-map-container {
     height: calc(100vh - 76px);
+    /*height: 100vh;*/
   }
   .floating-button {
     position: fixed !important;

@@ -8,7 +8,8 @@ import NotFound from '../spa/NotFound';
 /* eslint-disable import/prefer-default-export */
 export const routes = [
   {
-    path: '/busapp-pwa',
+    // path: '/busapp-pwa',
+    path: '/',
     component: Home,
     children: [
       {

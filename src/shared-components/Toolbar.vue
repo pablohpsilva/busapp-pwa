@@ -6,10 +6,10 @@
       <md-icon>menu</md-icon>
     </md-button> -->
 
-    <h2 class="md-title"
+    <!-- <h2 class="md-title"
       style="flex: 1">
       {{ title }}
-    </h2>
+    </h2> -->
 
     <!-- <md-input-container>
       <label>Money</label>
@@ -17,10 +17,10 @@
       <md-icon>search</md-icon>
     </md-input-container> -->
 
-    <md-input-container md-accent class="md-input-container-toolbar">
-      <label md-accent>Cidade</label>
-      <md-input type="text" md-accent></md-input>
-      <md-icon md-accent>search</md-icon>
+    <md-input-container class="Toolbar__Search"
+      @keyup.native.enter="emitSearch">
+      <label>Type 'T131' and press Enter</label>
+      <md-input v-model="query"></md-input>
     </md-input-container>
 
   </md-toolbar>
@@ -48,6 +48,7 @@
         progressInterval: null,
         done: false,
         transition: true,
+        query: '',
       };
     },
     components: {
@@ -55,6 +56,13 @@
     methods: {
       toggleSidenav() {
         this.$emit('TOGGLE_SIDEBAR');
+      },
+      emitSearch() {
+        if (this.query.length && this.query.toLowerCase() === 't131') {
+          this.$emit('SEARCH_T131');
+          return;
+        }
+        this.$emit('SEARCH_WRONG');
       },
     },
   };
@@ -73,5 +81,34 @@
   .md-theme-default.md-input-container .md-icon:not(.md-icon-delete)::after {
     background: none !important;
     background-color: none !important;
+  }
+
+  .Toolbar__Search {
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,.2), 0 2px 2px rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+    border-radius: 2px;
+    color: rgba(0, 0, 0, .87) !important;
+    padding: 0 1em;
+    margin-bottom: 12px !important;
+    margin-top: 12px !important;
+  }
+
+  .Toolbar__Search label {
+    padding: 0 1em;
+  }
+
+  .md-input-container.Toolbar__Search,
+  .md-input-container.md-input-focused.Toolbar__Search,
+  .md-input-container.md-has-value.md-input-focused.Toolbar__Search,
+  .md-input-container.Toolbar__Search input,
+  .md-input-container.md-has-value.md-input-focused.Toolbar__Search input,
+  .md-input-container.md-has-value.md-input-focused.Toolbar__Search textarea,
+  .md-input-container.Toolbar__Search textarea {
+    color: rgba(0, 0, 0, .87) !important;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 1) !important;
+  }
+  .Toolbar__Search input {
+    color: rgba(0, 0, 0, .87) !important;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 1) !important;
   }
 </style>
