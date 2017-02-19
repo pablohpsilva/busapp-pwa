@@ -9,7 +9,7 @@ import NotFound from '../spa/NotFound';
 export const routes = [
   {
     // path: '/busapp-pwa',
-    path: '/',
+    path: '/busapp-pwa/',
     component: Home,
     children: [
       {
