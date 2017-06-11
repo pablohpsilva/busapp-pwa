@@ -6,6 +6,7 @@
       <gmap-marker
         v-if="showMap && markers && markers.length && markers[0].hasOwnProperty('position')"
         v-for="m in markers"
+        :key="m"
         icon="https://s28.postimg.org/xxji5m6y5/bus.png"
         :position="m.position"
         :clickable="true"
@@ -116,20 +117,24 @@
       //     [];
       // },
       // markers() {
-      //   return (this.globalIndex !== -1 && this.entityMarkers && !this.entityMarkers.hasOwnProperty('length')) ?
+      //   return (this.globalIndex !== -1 &&
+      //     this.entityMarkers &&
+      //     !this.entityMarkers.hasOwnProperty('length')) ?
       //     [this.entityMarkers.position[this.globalIndex]] :
       //     [];
       // },
       markers() {
         return (this.entities.length && this.entities[0].position[this.globalIndex]) ?
-          [this.entities[0].position[this.globalIndex]]:
+          [this.entities[0].position[this.globalIndex]] :
           [];
       },
     },
     watch: {
       markers() {
         const center = this.markers[0].position;
-        if (center && center.hasOwnProperty('lat') && center.lat) {
+        if (center &&
+          center.hasOwnProperty('lat') && // eslint-disable-line
+          center.lat) {
           if (this.showMap) {
             this.center = center;
           }
@@ -140,16 +145,15 @@
       openDialog(ref) {
         this.$refs[ref].open();
       },
-      closeCreateDialog(ref) {
-        const id = this.newEntity.id;
-
-        this.orionResources.post( {
+      closeCreateDialog() {
+        // const id = this.newEntity.id;
+        this.orionResources.post({
           options: 'keyValues',
         }, this.newEntity)
           .then((doc) => {
             this.entities.push(doc.data);
             this.center = doc.data.position;
-            this.closeDialog(ref);
+            // this.closeDialog(ref);
           })
           .catch((err) => {
             this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);
@@ -162,7 +166,7 @@
             window.localStorage.setItem('busLocations', JSON.stringify(this.processOrionEntity(docs.data)));
           })
           .catch((err) => {
-            console.warn('requestPopulateMap error', err);
+            console.warn('requestPopulateMap error', err); // eslint-disable-line
             const aux = (window.localStorage.getItem('busLocations')) ?
               JSON.parse(window.localStorage.getItem('busLocations')) :
               this.processOrionEntity([JSON.parse(JSON.stringify(this.newEntity))]);
@@ -175,13 +179,13 @@
         this.$refs[ref].close();
       },
       onOpen() {
-        console.log('Opened');
+        console.log('Opened'); // eslint-disable-line
       },
       onClose(type) {
-        console.log('Closed', type);
+        console.log('Closed', type); // eslint-disable-line
       },
       processOrionEntity(entities) {
-        return entities.map(el => {
+        return entities.map((el) => {
           const obj = {};
           obj.id = el.id;
           obj.name = el.name.value || el.name;
@@ -201,7 +205,7 @@
           .then((doc) => {
             this.entities.push(doc.data);
             this.center = doc.data.position;
-            this.closeDialog(ref);
+            // this.closeDialog(ref);
           })
           .catch((err) => {
             this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);

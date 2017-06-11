@@ -87,14 +87,17 @@ class Toast {
   }
 }
 
-export default new Toast();
 
 function plugin(Vue) {
-  Vue.prototype.$toast = new Toast();
+  Vue.prototype.$toast = new Toast(); // eslint-disable-line
 }
 
 if (typeof window !== 'undefined' && window.Vue) { // eslint-disable-line no-undef
   window.Vue.use(plugin); // eslint-disable-line no-undef
 }
 
-module.exports = plugin;
+export default plugin;
+
+// module.exports = (Vue) => {
+//   Vue.prototype.$toast = new Toast(); // eslint-disable-line
+// };

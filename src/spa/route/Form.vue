@@ -78,10 +78,10 @@
       saveEntity() {
         const entity = Object.assign({}, this.entity);
         entity.positions = this.explodePositionString().map(el => this.createLatLon(el));
-        console.log(entity);
+        console.log(entity); // eslint-disable-line
         this.orionResources.post(entity)
           .then(() => {
-            console.log('saved!');
+            console.log('saved!'); // eslint-disable-line
           })
           .catch((err) => {
             throw err;

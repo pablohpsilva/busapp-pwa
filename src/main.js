@@ -9,7 +9,7 @@ import './config/directives';
 import './config/validations';
 import './config/theme';
 import store from './config/flux';
-import { router } from './config/router';
+import { router } from './router';
 
 // Importando o componente raíz onde a app será renderizada.
 import App from './App';

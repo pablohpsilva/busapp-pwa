@@ -21,5 +21,5 @@ Vue.use(VueGoogleMaps, {
     key: 'AIzaSyAzDCg1d-pXblLwlmI4Rj7EYIDZAvdfpFs',
     // v: 'OPTIONAL VERSION NUMBER',
     // libraries: 'places', //// If you need to use place input
-  }
+  },
 });

@@ -1,38 +1,38 @@
 import VueRouter from 'vue-router';
-
 import Home from '../spa/Home';
-import Map from '../spa/map/Map';
-import Form from '../spa/route/Form';
-import NotFound from '../spa/NotFound';
 
-/* eslint-disable import/prefer-default-export */
+function load(path) {
+  return () => System.import(`${path}.vue`);
+}
+
 export const routes = [
+  // {
+  //   path: '/',
+  //   name: 'Hello',
+  //   component: Hello,
+  // },
   {
-    // path: '/busapp-pwa',
-    path: '/busapp-pwa/',
+    path: '/',
+    // path: '/busapp-pwa/',
     component: Home,
     children: [
       {
         path: 'map',
         name: 'map',
-        component: Map,
+        component: load('../spa/map/Map'),
       },
       {
         path: 'form',
         name: 'form',
-        component: Form,
+        component: load('../spa/route/Form'),
       },
     ],
   },
-  // {
-  //   path: '*',
-  //   component: NotFound,
-  // },
 ];
 
 export const VueRouterObject = {
   routes,
-  mode: 'history',
+  // mode: 'history',
   saveScrollPosition: true,
 };
 

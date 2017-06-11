@@ -1,26 +1,20 @@
 <template lang="html">
-  <md-sidenav class="md-left Sidebar__Wrapper"
-    v-on:open="lockBodyScroll"
-    v-on:close="unlockBodyScroll"
-    ref="leftSidenav">
+  <md-sidenav class="md-left Sidebar__Wrapper" @open="lockBodyScroll" @close="unlockBodyScroll" ref="leftSidenav">
     <md-toolbar class="md-account-header">
       <md-list class="md-transparent">
         <md-list-item class="md-avatar-list">
           <md-avatar class="md-large">
-            <img src="https://placeimg.com/64/64/people/8"
-              alt="People">
+            <img src="https://placeimg.com/64/64/people/8" alt="People">
           </md-avatar>
 
           <span style="flex: 1"></span>
 
           <md-avatar>
-            <img src="https://placeimg.com/40/40/people/3"
-              alt="People">
+            <img src="https://placeimg.com/40/40/people/3" alt="People">
           </md-avatar>
 
           <md-avatar>
-            <img src="https://placeimg.com/40/40/people/4"
-              alt="People">
+            <img src="https://placeimg.com/40/40/people/4" alt="People">
           </md-avatar>
         </md-list-item>
 
@@ -38,13 +32,17 @@
     </md-toolbar>
 
     <md-list>
-      <md-list-item v-for="item in menuList">
+      <md-list-item
+        v-for="item in menuList"
+        :key="item">
         <md-icon>{{ item.icon }}</md-icon>
         <span>{{ item.text }}</span>
         <md-list-expand v-if="item.sub">
           <md-list>
-            <md-list-item class="md-inset"
-              v-for="sub in item.sub">
+            <md-list-item
+              class="md-inset"
+              v-for="sub in item.sub"
+              :key="sub">
               <md-icon v-if="sub.icon">{{ sub.icon }}</md-icon>
               <span v-if="sub.text">{{ sub.text }}</span>
             </md-list-item>
@@ -62,12 +60,33 @@
         type: Array,
         default() {
           return [
-            { text: 'Favoritos', icon: 'favorite', url: '' },
-            { text: 'Configs', icon: 'settings', url: '', sub: [
-              { text: 'Rowing', icon: 'rowing', url: '' },
-              { text: 'Ethernet', icon: 'settings_ethernet', url: '' },
-            ] },
-            { text: 'delta', icon: 'change_history', url: '' },
+            {
+              text: 'Favoritos',
+              icon: 'favorite',
+              url: '',
+            },
+            {
+              text: 'Configs',
+              icon: 'settings',
+              url: '',
+              sub: [
+                {
+                  text: 'Rowing',
+                  icon: 'rowing',
+                  url: '',
+                },
+                {
+                  text: 'Ethernet',
+                  icon: 'settings_ethernet',
+                  url: '',
+                },
+              ],
+            },
+            {
+              text: 'delta',
+              icon: 'change_history',
+              url: '',
+            },
           ];
         },
       },
@@ -80,15 +99,15 @@
         document.body.style.overflowY = 'hidden';
       },
       unlockBodyScroll() {
-        document.body.style.overflowY = 'auto'
+        document.body.style.overflowY = 'auto';
       },
     },
   };
+
 </script>
 
 <style>
-  .Sidebar__Wrapper {}
-
+  /*.Sidebar__Wrapper {}*/
   .Sidebar__Wrapper.md-sidenav.md-active .md-sidenav-content,
   .Sidebar__Wrapper.md-sidenav.md-active .md-sidenav-backdrop {
     height: 100% !important;

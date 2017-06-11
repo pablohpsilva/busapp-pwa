@@ -1,6 +1,8 @@
 const mutations = {
   adicionarCanal(state, canal) {
-    if (canal && typeof canal === 'object' && !canal.hasOwnProperty('length')) {
+    if (canal &&
+      typeof canal === 'object' &&
+      !canal.hasOwnProperty('length')) { // eslint-disable-line
       state.canais.unshift(canal);
     }
   },

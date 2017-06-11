@@ -4,7 +4,7 @@
       :title="pageName"
       @SEARCH_T131="shouldOpenMap"
       @SEARCH_WRONG="showErrorDialog"
-      v-on:TOGGLE_SIDEBAR="toggleSidenav"></toolbar>
+      @TOGGLE_SIDEBAR="toggleSidenav"></toolbar>
 
     <!-- <keep-alive>
       <transition name="slide-fade"
@@ -83,10 +83,10 @@
         window.localStorage.setItem('showDialog', true);
       },
       onOpen() {
-        console.log('Opened');
+        console.log('Opened'); // eslint-disable-line
       },
       onClose(type) {
-        console.log('Closed', type);
+        console.log('Closed', type); // eslint-disable-line
       },
       shouldShowDialog() {
         if (!window.localStorage.getItem('showDialog')) {
@@ -100,7 +100,7 @@
         this.showMap = true;
       },
       showErrorDialog() {
-        this.$refs['dialog2'].open();
+        this.$refs.dialog2.open();
       },
     },
     mounted() {
