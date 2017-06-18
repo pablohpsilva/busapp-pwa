@@ -4,10 +4,20 @@
       :center="center"
       :zoom="14">
       <gmap-marker
-        v-if="markers && markers.length"
-        v-for="m in markers"
+        v-if="busMarkers && busMarkers.length"
+        v-for="m in busMarkers"
         :key="m"
         icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/bus.png?raw=true"
+        :position="m.position"
+        :clickable="true"
+        :draggable="true"
+        @click="center=m.position"/>
+
+      <gmap-marker
+        v-if="busStopMarkers && busStopMarkers.length"
+        v-for="m in busStopMarkers"
+        :key="m"
+        icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/busstop.png?raw=true"
         :position="m.position"
         :clickable="true"
         :draggable="true"
@@ -42,13 +52,15 @@
       };
     },
     computed: {
-      markers() {
+      busMarkers() {
         return (this.buses.length) ?
-          this.buses.map(el => this.createMarker(el)) :
+          this.buses.map(el => this.createBusMarker(el)) :
           [];
-        // return (this.entities.length && this.entities[0].position[this.globalIndex]) ?
-        //   [this.entities[0].position[this.globalIndex]] :
-        //   [];
+      },
+      busStopMarkers() {
+        return (this.buses.length) ?
+          this.buses.map(el => this.createBusStopMarker(el)) :
+          [];
       },
     },
     watch: {
@@ -106,7 +118,7 @@
       onClose(type) {
         console.log('Closed', type); // eslint-disable-line
       },
-      createMarker(bus) {
+      createBusMarker(bus) {
         return {
           busPlateId: bus.busPlateId,
           isRunning: bus.isRunning,
@@ -114,6 +126,17 @@
           position: {
             lat: bus.lastPosition.latitude,
             lng: bus.lastPosition.longitude,
+          },
+        };
+      },
+      createBusStopMarker(stop) {
+        return {
+          description: stop.description,
+          stationName: stop.stationName,
+          routeIds: stop.routeIds,
+          position: {
+            lat: stop.lastPosition.latitude,
+            lng: stop.lastPosition.longitude,
           },
         };
       },
