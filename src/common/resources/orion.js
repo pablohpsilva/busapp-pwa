@@ -1,7 +1,8 @@
 // const basePath = '/v2/entities';
-const basePath = (process && process.env && process.env.NODE_ENV === 'development') ?
-  '/v2/entities' :
-  'http://67.205.174.57:1026/v2/entities';
+const basePath =
+  (process && process.env && process.env.NODE_ENV === 'development') ?
+    '/v2' :
+    'http://buzapp.com.br:1337';
 
 const orionActions = {
   list: { method: 'GET', url: `${basePath}` },
