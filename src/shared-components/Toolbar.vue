@@ -17,7 +17,7 @@
       <md-icon>search</md-icon>
     </md-input-container> -->
 
-    <md-input-container class="Toolbar__Search"
+    <md-input-container
       @keyup.native.enter="emitSearch">
       <label>Type 'T131' and press Enter</label>
       <md-input v-model="query"></md-input>

@@ -1,10 +1,12 @@
 <template lang="html">
   <div>
-    <toolbar id="toolbar" class="Home__PageTeller"
+    <toolbar
+      id="toolbar"
+      class="Home__PageTeller"
       :title="pageName"
       @SEARCH_T131="shouldOpenMap"
       @SEARCH_WRONG="showErrorDialog"
-      @TOGGLE_SIDEBAR="toggleSidenav"></toolbar>
+      @TOGGLE_SIDEBAR="toggleSidenav"/>
 
     <!-- <keep-alive>
       <transition name="slide-fade"

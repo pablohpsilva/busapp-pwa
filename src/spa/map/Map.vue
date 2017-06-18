@@ -4,26 +4,27 @@
       :center="center"
       :zoom="14">
       <gmap-marker
-        v-if="busMarkers && busMarkers.length"
+        v-if="showMap && busMarkers && busMarkers.length"
         v-for="m in busMarkers"
         :key="m"
         icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/bus.png?raw=true"
         :position="m.position"
         :clickable="true"
-        :draggable="true"
+        :draggable="false"
         @click="center=m.position"/>
 
       <gmap-marker
-        v-if="busStopMarkers && busStopMarkers.length"
+        v-if="showMap && busStopMarkers && busStopMarkers.length"
         v-for="m in busStopMarkers"
         :key="m"
-        icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/busstop.png?raw=true"
+        :icon="`https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/${ m.stationName.indexOf('Terminal') !== -1 ? 'busstation' : 'busstop' }.png?raw=true`"
         :position="m.position"
         :clickable="true"
-        :draggable="true"
-        @click="center=m.position"/>
+        :draggable="false"
+        :title="m.stationName"
+        :label="m.stationName"
+        :animation="2"/>
     </gmap-map>
-    <!--icon="https://s28.postimg.org/xxji5m6y5/bus.png"-->
   </div>
 </template>
 
@@ -58,8 +59,8 @@
           [];
       },
       busStopMarkers() {
-        return (this.buses.length) ?
-          this.buses.map(el => this.createBusStopMarker(el)) :
+        return (this.busStops.length) ?
+          this.busStops.map(el => this.createBusStopMarker(el)) :
           [];
       },
     },
@@ -68,20 +69,6 @@
     methods: {
       openDialog(ref) {
         this.$refs[ref].open();
-      },
-      closeCreateDialog() {
-        // const id = this.newEntity.id;
-        this.orionResources.post({
-          options: 'keyValues',
-        }, this.newEntity)
-          .then((doc) => {
-            this.entities.push(doc.data);
-            this.center = doc.data.position;
-            // this.closeDialog(ref);
-          })
-          .catch((err) => {
-            this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);
-          });
       },
       requestPopulateMap() {
         this.orionResources.get({ id: 'T131' })
@@ -92,22 +79,6 @@
           .catch((err) => {
             console.warn('requestPopulateMap error', err); // eslint-disable-line
           });
-        // this.orionResources.list()
-        //   .then((docs) => {
-        //     this.entities = this.processOrionEntity(docs.data);
-        //     window
-        //       .localStorage
-        //       .setItem('busLocations', JSON.stringify(this.processOrionEntity(docs.data)));
-        //   })
-        //   .catch((err) => {
-        //     console.warn('requestPopulateMap error', err); // eslint-disable-line
-        //     const aux = (window.localStorage.getItem('busLocations')) ?
-        //       JSON.parse(window.localStorage.getItem('busLocations')) :
-        //       this.processOrionEntity([JSON.parse(JSON.stringify(this.newEntity))]);
-
-        //     window.aux1 = aux;
-        //     this.entities = aux;
-        //   });
       },
       closeDialog(ref) {
         this.$refs[ref].close();
@@ -130,60 +101,20 @@
         };
       },
       createBusStopMarker(stop) {
+        const position = {
+          lat: Number(stop.position.latitude),
+          lng: Number(stop.position.longitude),
+        };
         return {
           description: stop.description,
           stationName: stop.stationName,
           routeIds: stop.routeIds,
-          position: {
-            lat: stop.lastPosition.latitude,
-            lng: stop.lastPosition.longitude,
-          },
+          position,
         };
-      },
-      processOrionEntity(entities) {
-        return entities.map((el) => {
-          const obj = {};
-          obj.id = el.id;
-          obj.name = el.name.value || el.name;
-          obj.position = this.processOrionEntityPosition(el.position.value || el.position);
-          return obj;
-        });
-      },
-      processOrionEntityPosition(positions) {
-        return positions.map(el => ({ position: el }));
-      },
-      saveBusRoute() {
-        this.orionResources.post(
-          {
-            options: 'keyValues',
-          },
-          this.newEntity)
-          .then((doc) => {
-            this.entities.push(doc.data);
-            this.center = doc.data.position;
-            // this.closeDialog(ref);
-          })
-          .catch((err) => {
-            this.$toast.create(`Error! ${err.toString()}`, 'snack', 5E3);
-          });
-      },
-      moveMarker() {
-        setInterval(() => {
-          if (!this.entities.length) {
-            return;
-          }
-          if (this.globalIndex === this.entities[0].position.length - 1) {
-            this.entities[0].position = this.entities[0].position.reverse();
-            this.globalIndex = -1;
-          }
-          this.globalIndex += 1;
-        }, 1E3);
       },
     },
     mounted() {
       this.requestPopulateMap();
-      // this.moveMarker();
-      // this.saveBusRoute();
     },
   };
 </script>
