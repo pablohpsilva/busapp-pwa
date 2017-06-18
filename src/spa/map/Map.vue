@@ -7,7 +7,7 @@
         v-if="markers && markers.length"
         v-for="m in markers"
         :key="m"
-        icon="https://s28.postimg.org/xxji5m6y5/bus.png"
+        icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/bus.png?raw=true"
         :position="m.position"
         :clickable="true"
         :draggable="true"
