@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/v2': {
-        target: 'http://buzapp.com.br:1337/',
+        target: 'http://localhost:3000/',
         changeOrigin: true,
         pathRewrite: {
           '^/v2': ''

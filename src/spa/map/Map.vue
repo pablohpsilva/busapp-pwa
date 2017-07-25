@@ -4,8 +4,8 @@
       :center="center"
       :zoom="14">
       <gmap-marker
-        v-if="showMap && busMarkers && busMarkers.length"
-        v-for="m in busMarkers"
+        v-if="showMap && busPosition && busPosition.length"
+        v-for="m in busPosition"
         :key="m"
         icon="https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/bus.png?raw=true"
         :position="m.position"
@@ -14,8 +14,8 @@
         @click="center=m.position"/>
 
       <gmap-marker
-        v-if="showMap && busStopMarkers && busStopMarkers.length"
-        v-for="m in busStopMarkers"
+        v-if="showMap && busStops && busStops.length"
+        v-for="m in busStops"
         :key="m"
         :icon="`https://github.com/pablohpsilva/busapp-pwa/blob/master/src/assets/img/${ m.stationName.indexOf('Terminal') !== -1 ? 'busstation' : 'busstop' }.png?raw=true`"
         :position="m.position"
@@ -29,7 +29,8 @@
 </template>
 
 <script>
-  import { orionResource } from '../../common/resources/orion';
+  import { orionBusResource } from '../../common/resources/orion-bus';
+  import { orionStopResource } from '../../common/resources/orion-stops';
 
   export default {
     name: 'Map',
@@ -45,7 +46,8 @@
     },
     data() {
       return {
-        orionResources: orionResource(this.$resource),
+        orionBusResources: orionBusResource(this.$resource),
+        orionStopResources: orionStopResource(this.$resource),
         globalIndex: 0,
         center: {
           lat: -18.9176744,
@@ -53,27 +55,23 @@
         },
         entities: [],
         buses: [],
+        busPosition: [],
         busStops: [],
-        eventLoop: 0,
-        interval: 5E3,
+        intervals: {},
+        intervalTime: 2E3,
         hasError: null,
       };
     },
     computed: {
-      busMarkers() {
-        return (this.buses.length) ?
-          this.buses.map(el => this.createBusMarker(el)) :
-          [];
-      },
-      busStopMarkers() {
-        return (this.busStops.length) ?
-          this.busStops.map(el => this.createBusStopMarker(el)) :
-          [];
-      },
+      // busPosition() {
+      //   return this.buses.length ?
+      //     this.buses.map(el => el.currentPosition) :
+      //     [];
+      // },
     },
     watch: {
       search() {
-        this.requestPopulateMap();
+        this.resetAll();
       },
       hasError() {
         if (!this.hasError) {
@@ -82,31 +80,35 @@
       },
     },
     methods: {
+      clearIntervals() {
+        const keys = Object.keys(this.intervals);
+        if (keys.length) {
+          keys.forEach(el => window.clearInterval(this.intervals[el]));
+        }
+        this.intervals = {};
+      },
       closeDialog(ref) {
         this.$refs[ref].close();
       },
-      createBusMarker(bus) {
-        return {
-          busPlateId: bus.busPlateId,
-          isRunning: bus.isRunning,
-          timeToNextStop: bus.timeToNextStop,
-          position: {
-            lat: bus.lastPosition.latitude,
-            lng: bus.lastPosition.longitude,
-          },
-        };
+      createEventLoop(bus) {
+        bus.currentIndex = 0; // eslint-disable-line
+        const id = bus._id; // eslint-disable-line
+        const interval = window.setInterval(() => {
+          const index = bus.currentIndex + 1;
+          if (index >= bus.location.length) {
+            bus.currentIndex = 0; // eslint-disable-line
+          }
+          bus.currentIndex = index; // eslint-disable-line
+          this.extractBusPosition(bus.location[index]);
+        }, this.intervalTime);
+
+        this.registerInterval(id, interval);
       },
-      createBusStopMarker(stop) {
-        const position = {
-          lat: Number(stop.position.latitude),
-          lng: Number(stop.position.longitude),
-        };
-        return {
-          description: stop.description,
-          stationName: stop.stationName,
-          routeIds: stop.routeIds,
-          position,
-        };
+      extractBusPosition(position) {
+        if ((this.busPosition.length + 1) > 5) {
+          this.busPosition = [];
+        }
+        this.busPosition.push(position);
       },
       openDialog(ref) {
         this.$refs[ref].open();
@@ -117,14 +119,26 @@
       onOpen() {
         console.log('Opened'); // eslint-disable-line
       },
-      removeRequestEventLoop() {
-        window.clearInterval(this.eventLoop);
+      registerInterval(id, interval) {
+        if (this.intervals.hasOwnProperty(id)) { // eslint-disable-line
+          // window.clearInterval(this.intervals[id]);
+          // this.intervals[id] = 0;
+          return;
+        }
+        this.intervals[id] = interval;
       },
       requestPopulateMap() {
-        this.orionResources.get({ id: this.search })
+        if (!this.search) {
+          return;
+        }
+        this.requestPopulateBus();
+        this.requestPopulateStop();
+      },
+      requestPopulateBus() {
+        this.orionBusResources.get({ id: this.search })
           .then((res) => {
-            this.buses = res.body.activeBuses;
-            this.busStops = res.body.busStops;
+            this.buses = res.body;
+            this.buses.forEach(el => this.createEventLoop(el));
             this.hasError = null;
           })
           .catch((err) => {
@@ -132,21 +146,28 @@
             this.$emit('error', this.hasError);
           });
       },
+      requestPopulateStop() {
+        this.orionStopResources.get({ id: this.search })
+          .then((res) => {
+            this.busStops = res.body;
+            this.hasError = null;
+          })
+          .catch((err) => {
+            this.hasError = err;
+            this.$emit('error', this.hasError);
+          });
+      },
+      resetAll() {
+        this.clearIntervals();
+        this.busPosition = [];
+        this.requestPopulateMap();
+      },
       startRequestEventLoop() {
-        if (this.eventLoop) {
-          this.removeRequestEventLoop();
-        }
-        this.eventLoop = window.setInterval(() => {
-          if (this.hasError) {
-            this.removeRequestEventLoop();
-            return;
-          }
-          this.requestPopulateMap();
-        }, this.interval);
+        this.resetAll();
       },
     },
     mounted() {
-      this.requestPopulateMap();
+      this.resetAll();
     },
   };
 </script>
