@@ -58,11 +58,12 @@
         this.$emit('TOGGLE_SIDEBAR');
       },
       emitSearch() {
-        if (this.query.length && this.query.toLowerCase() === 't131') {
-          this.$emit('SEARCH_T131');
+        const busRouteName = this.query;
+        if (busRouteName) {
+          this.$emit('search', busRouteName.trim().toUpperCase());
           return;
         }
-        this.$emit('SEARCH_WRONG');
+        this.$emit('error');
       },
     },
   };

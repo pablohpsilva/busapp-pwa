@@ -4,8 +4,8 @@
       id="toolbar"
       class="Home__PageTeller"
       :title="pageName"
-      @SEARCH_T131="shouldOpenMap"
-      @SEARCH_WRONG="showErrorDialog"
+      @search="shouldOpenMap"
+      @error="showErrorDialog"
       @TOGGLE_SIDEBAR="toggleSidenav"/>
 
     <!-- <keep-alive>
@@ -15,7 +15,10 @@
       </transition>
     </keep-alive> -->
 
-    <map-g :show-map="showMap"></map-g>
+    <map-g
+      :show-map="showMap"
+      :search="search"
+      @error="showErrorDialog"/>
 
     <md-dialog ref="dialog2">
       <md-dialog-title>Ops...</md-dialog-title>
@@ -61,6 +64,7 @@
       return {
         showDialog: false,
         showMap: false,
+        search: '',
       };
     },
     computed: {
@@ -95,7 +99,9 @@
           this.openDialog('dialog1');
         }
       },
-      shouldOpenMap() {
+      shouldOpenMap(search) {
+        this.search = search;
+
         if (this.showMap) {
           return;
         }

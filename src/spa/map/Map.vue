@@ -38,6 +38,10 @@
         type: Boolean,
         default() { return false; },
       },
+      search: {
+        type: String,
+        default: 'T131',
+      },
     },
     data() {
       return {
@@ -50,6 +54,9 @@
         entities: [],
         buses: [],
         busStops: [],
+        eventLoop: 0,
+        interval: 5E3,
+        hasError: null,
       };
     },
     computed: {
@@ -65,29 +72,18 @@
       },
     },
     watch: {
+      search() {
+        this.requestPopulateMap();
+      },
+      hasError() {
+        if (!this.hasError) {
+          this.startRequestEventLoop();
+        }
+      },
     },
     methods: {
-      openDialog(ref) {
-        this.$refs[ref].open();
-      },
-      requestPopulateMap() {
-        this.orionResources.get({ id: 'T131' })
-          .then((res) => {
-            this.buses = res.body.activeBuses;
-            this.busStops = res.body.busStops;
-          })
-          .catch((err) => {
-            console.warn('requestPopulateMap error', err); // eslint-disable-line
-          });
-      },
       closeDialog(ref) {
         this.$refs[ref].close();
-      },
-      onOpen() {
-        console.log('Opened'); // eslint-disable-line
-      },
-      onClose(type) {
-        console.log('Closed', type); // eslint-disable-line
       },
       createBusMarker(bus) {
         return {
@@ -111,6 +107,42 @@
           routeIds: stop.routeIds,
           position,
         };
+      },
+      openDialog(ref) {
+        this.$refs[ref].open();
+      },
+      onClose(type) {
+        console.log('Closed', type); // eslint-disable-line
+      },
+      onOpen() {
+        console.log('Opened'); // eslint-disable-line
+      },
+      removeRequestEventLoop() {
+        window.clearInterval(this.eventLoop);
+      },
+      requestPopulateMap() {
+        this.orionResources.get({ id: this.search })
+          .then((res) => {
+            this.buses = res.body.activeBuses;
+            this.busStops = res.body.busStops;
+            this.hasError = null;
+          })
+          .catch((err) => {
+            this.hasError = err;
+            this.$emit('error', this.hasError);
+          });
+      },
+      startRequestEventLoop() {
+        if (this.eventLoop) {
+          this.removeRequestEventLoop();
+        }
+        this.eventLoop = window.setInterval(() => {
+          if (this.hasError) {
+            this.removeRequestEventLoop();
+            return;
+          }
+          this.requestPopulateMap();
+        }, this.interval);
       },
     },
     mounted() {

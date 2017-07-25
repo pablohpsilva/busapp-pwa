@@ -1,15 +1,18 @@
-var fs = require('fs')
-var path = require('path')
-var utils = require('./utils')
-var webpack = require('webpack')
-var config = require('../config')
-var merge = require('webpack-merge')
-var baseWebpackConfig = require('./webpack.base.conf')
-var CopyWebpackPlugin = require('copy-webpack-plugin')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+var
+  fs = require('fs'),
+  path = require('path'),
+  glob = require('glob'),
+  utils = require('./utils'),
+  webpack = require('webpack'),
+  config = require('../config'),
+  merge = require('webpack-merge'),
+  baseWebpackConfig = require('./webpack.base.conf'),
+  CopyWebpackPlugin = require('copy-webpack-plugin'),
+  HtmlWebpackPlugin = require('html-webpack-plugin'),
+  ExtractTextPlugin = require('extract-text-webpack-plugin'),
+  OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin'),
+  SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin'),
+  PurifyCSSPlugin = require('purifycss-webpack');
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -35,7 +38,24 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: true, // warn about potentially dangerous optimizations/code
+        sequences: true,  // join consecutive statemets with the “comma operator”
+        properties: true,  // optimize property access: a["foo"] → a.foo
+        dead_code: true,  // discard unreachable code
+        drop_debugger: true,  // discard “debugger” statements
+        unsafe: false, // some unsafe optimizations (see below)
+        conditionals: true,  // optimize if-s and conditional expressions
+        comparisons: true,  // optimize comparisons
+        evaluate: true,  // evaluate constant expressions
+        booleans: true,  // optimize boolean expressions
+        loops: true,  // optimize loops
+        unused: true,  // drop unused variables/functions
+        hoist_funs: true,  // hoist function declarations
+        hoist_vars: true, // hoist variable declarations
+        if_return: true,  // optimize if-s followed by return/continue
+        join_vars: true,  // join var declarations
+        cascade: true,  // try to cascade `right` into `left` in sequences
+        side_effects: true,  // drop side-effect-free statements
       },
       sourceMap: true
     }),
@@ -43,11 +63,18 @@ var webpackConfig = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),
+    new PurifyCSSPlugin({
+      // Give paths to parse for rules. These should be absolute!
+      paths: glob.sync(path.join(__dirname, '../*.html')),
+    }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
       cssProcessorOptions: {
-        safe: true
+        safe: true,
+        discardComments: {
+          removeAll: true
+        }
       }
     }),
     // generate dist index.html with correct asset hash for caching.
@@ -58,11 +85,25 @@ var webpackConfig = merge(baseWebpackConfig, {
         ? 'index.html'
         : config.build.index,
       template: 'index.html',
-      inject: true,
+      inject: 'body',
       minify: {
+        html5: true,
+        useShortDoctype: true,
+        decodeEntities: true,
+        removeTagWhitespace: true,
+        removeStyleLinkTypeAttributes: true,
+        removeScriptTypeAttributes: true,
+        minifyCSS: true,
+        minifyJS: true,
         removeComments: true,
         collapseWhitespace: true,
-        removeAttributeQuotes: true
+        collapseBooleanAttributes: true,
+        removeAttributeQuotes: false,
+        removeRedundantAttributes: true,
+        removeEmptyAttributes: true,
+        preserveLineBreaks: false,
+        sortAttributes: true,
+        sortClassName: true,
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
@@ -90,6 +131,27 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      // filename: 'used-twice.js',
+      async: 'used-twice',
+      children: false,
+      minChunks: function (module, count) {
+        return count >= 2;
+      },
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      // filename: 'vue-loader.js',
+      async: 'vue-loader',
+      minChunks: function (module, count) {
+        var context = module.context;
+        var targets = ['vue', 'vue-router']
+        return context &&
+          context.indexOf(path.join(__dirname, '../node_modules')) >= 0 &&
+            targets.find(function (t) {
+                return new RegExp('\\\\' + t + '\\\\', 'i').test(context);
+              });
+      },
     }),
     // copy custom static assets
     new CopyWebpackPlugin([
