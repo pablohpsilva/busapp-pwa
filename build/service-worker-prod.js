@@ -247,7 +247,7 @@
       )
     );
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function(event) {
     var expectedCacheNames = Object.keys(CURRENT_CACHES).map(function(key) {
       return CURRENT_CACHES[key];
     });
