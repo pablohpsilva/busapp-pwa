@@ -1,0 +1,230 @@
+[
+    {
+        "_id": "5976bb7192f5c15e564b28be",
+        "busStopId": 0,
+        "stationName": "Terminal Santa Luzia",
+        "isStation": true,
+        "description": "Terminal Santa Luzia",
+        "__v": 0,
+        "position": {
+            "lat": -18.937165,
+            "lng": -48.229884
+        },
+        "routeId": [
+            "T131",
+            "T132",
+            "A339"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28bf",
+        "busStopId": 1,
+        "stationName": "Terminal Central",
+        "isStation": true,
+        "description": "Terminal Central",
+        "__v": 0,
+        "position": {
+            "lat": -18.913883,
+            "lng": -48.275496
+        },
+        "routeId": [
+            "T131",
+            "T132"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c0",
+        "busStopId": 2,
+        "stationName": "Cabine 13",
+        "isStation": false,
+        "description": "Cabine 13",
+        "__v": 0,
+        "position": {
+            "lat": -18.933115,
+            "lng": -48.23506
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c1",
+        "busStopId": 3,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 12",
+        "__v": 0,
+        "position": {
+            "lat": -18.930558,
+            "lng": -48.239899
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c2",
+        "busStopId": 4,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 11",
+        "__v": 0,
+        "position": {
+            "lat": -18.929151,
+            "lng": -48.244377
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c5",
+        "busStopId": 7,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 8",
+        "__v": 0,
+        "position": {
+            "lat": -18.926542,
+            "lng": -48.258388
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c6",
+        "busStopId": 8,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 7",
+        "__v": 0,
+        "position": {
+            "lat": -18.922481,
+            "lng": -48.262752
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c4",
+        "busStopId": 6,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 9",
+        "__v": 0,
+        "position": {
+            "lat": -18.927418,
+            "lng": -48.253206
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c3",
+        "busStopId": 5,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 10",
+        "__v": 0,
+        "position": {
+            "lat": -18.928176,
+            "lng": -48.249629
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c8",
+        "busStopId": 10,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 4",
+        "__v": 0,
+        "position": {
+            "lat": -18.9119,
+            "lng": -48.260145
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c7",
+        "busStopId": 9,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 6",
+        "__v": 0,
+        "position": {
+            "lat": -18.917775,
+            "lng": -48.260633
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28cb",
+        "busStopId": 13,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 1",
+        "__v": 0,
+        "position": {
+            "lat": -18.916266,
+            "lng": -48.271655
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28cc",
+        "busStopId": 14,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 5",
+        "__v": 0,
+        "position": {
+            "lat": -18.914133,
+            "lng": -48.258771
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28c9",
+        "busStopId": 11,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 3",
+        "__v": 0,
+        "position": {
+            "lat": -18.911827,
+            "lng": -48.265172
+        },
+        "routeId": [
+            "T131"
+        ]
+    },
+    {
+        "_id": "5976bb7192f5c15e564b28ca",
+        "busStopId": 12,
+        "stationName": "",
+        "isStation": false,
+        "description": "Cabine 2",
+        "__v": 0,
+        "position": {
+            "lat": -18.914275,
+            "lng": -48.267963
+        },
+        "routeId": [
+            "T131"
+        ]
+    }
+]

@@ -32,6 +32,9 @@
   import { orionBusResource } from '../../common/resources/orion-bus';
   import { orionStopResource } from '../../common/resources/orion-stops';
 
+  import jsonBus from '../../common/resources/bus.json';
+  import jsonStop from '../../common/resources/stops.json';
+
   export default {
     name: 'Map',
     props: {
@@ -137,25 +140,39 @@
       requestPopulateBus() {
         this.orionBusResources.get({ id: this.search })
           .then((res) => {
-            this.buses = res.body;
-            this.buses.forEach(el => this.createEventLoop(el));
-            this.hasError = null;
+            this.renderBuses(res.body);
           })
           .catch((err) => {
+            if (this.search.toLowerCase() === 't131') {
+              return this.renderBuses(jsonBus);
+            }
             this.hasError = err;
             this.$emit('error', this.hasError);
+            return this;
           });
       },
       requestPopulateStop() {
         this.orionStopResources.get({ id: this.search })
           .then((res) => {
-            this.busStops = res.body;
-            this.hasError = null;
+            this.renderStops(res.body);
           })
           .catch((err) => {
+            if (this.search.toLowerCase() === 't131') {
+              return this.renderStops(jsonStop);
+            }
             this.hasError = err;
             this.$emit('error', this.hasError);
+            return this;
           });
+      },
+      renderBuses(buses) {
+        this.buses = buses;
+        this.buses.forEach(el => this.createEventLoop(el));
+        this.hasError = null;
+      },
+      renderStops(stops) {
+        this.busStops = stops;
+        this.hasError = null;
       },
       resetAll() {
         this.clearIntervals();
