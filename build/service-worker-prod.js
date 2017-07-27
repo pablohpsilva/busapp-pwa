@@ -220,8 +220,7 @@
     // to make it easier to check the various components without dealing with string parsing.
     var url = new URL(requestUrl);
 
-    if ((url.hostname === 'www.maps.googleapis.com' ||
-        // url.hostname === 'ssl.google-analytics.com') &&
+    if (url.hostname === 'www.maps.googleapis.com' &&
         url.pathname === '/maps') {
       console.log('  Storing Google Analytics request in IndexedDB ' +
         'to be replayed later.');
