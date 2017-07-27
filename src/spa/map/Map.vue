@@ -26,6 +26,10 @@
         :draggable="false"
         :zIndex="1000"
         @click="center=m.position"/>
+
+      <!-- <gmap-polyline
+        v-if="showMap && polyline && polyline.length"
+        :path="polyline" /> -->
     </gmap-map>
   </div>
 </template>
@@ -52,12 +56,10 @@
       return {
         orionBusResources: orionBusResource(this.$resource),
         orionStopResources: orionStopResource(this.$resource),
-        globalIndex: 0,
         center: {
           lat: -18.9176744,
           lng: -48.2604986,
         },
-        entities: [],
         buses: [],
         busPosition: [],
         busStops: [],
@@ -70,6 +72,11 @@
       // busPosition() {
       //   return this.buses.length ?
       //     this.buses.map(el => el.currentPosition) :
+      //     [];
+      // },
+      // polyline() {
+      //   return this.busStops.length ?
+      //     this.busStops.map(el => el.position) :
       //     [];
       // },
     },
