@@ -253,21 +253,21 @@
       return CURRENT_CACHES[key];
     });
 
-    event.waitUntil(
-      // `caches` refers to the global CacheStorage object, and is defined at
-      // http://slightlyoff.github.io/ServiceWorker/spec/service_worker/#self-caches
-      caches.keys().then(function(cacheNames) {
-        return Promise.all(
-          cacheNames.map(function(cacheName) {
-            if (expectedCacheNames.indexOf(cacheName) === -1) {
-              // If this cache name isn't present in the array of "expected" cache names, then delete it.
-              console.log('Deleting out of date cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-    );
+    // event.waitUntil(
+    //   // `caches` refers to the global CacheStorage object, and is defined at
+    //   // http://slightlyoff.github.io/ServiceWorker/spec/service_worker/#self-caches
+    //   caches.keys().then(function(cacheNames) {
+    //     return Promise.all(
+    //       cacheNames.map(function(cacheName) {
+    //         if (expectedCacheNames.indexOf(cacheName) === -1) {
+    //           // If this cache name isn't present in the array of "expected" cache names, then delete it.
+    //           console.log('Deleting out of date cache:', cacheName);
+    //           return caches.delete(cacheName);
+    //         }
+    //       })
+    //     );
+    //   })
+    // );
 
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || isLocalhost)) {
       navigator.serviceWorker.register('service-worker.js')
