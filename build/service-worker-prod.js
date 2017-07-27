@@ -221,7 +221,7 @@
     var url = new URL(requestUrl);
 
     if ((url.hostname === 'maps.googleapis.com' || url.hostname === 'www.maps.googleapis.com')
-      && url.pathname === '/maps') {
+      && url.pathname === '/maps/vt') {
       console.log('  Storing Google Analytics request in IndexedDB ' +
         'to be replayed later.');
       saveAnalyticsRequest(requestUrl);
