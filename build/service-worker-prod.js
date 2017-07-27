@@ -152,7 +152,7 @@
   // as the cache could end up containing large responses that might not end up ever being accessed.
   // Other approaches, like selectively caching based on response headers or only caching
   // responses served from a specific domain, might be more appropriate for those use cases.
-  self.addEventListener('fetch', function(event) {
+  window.addEventListener('fetch', function(event) {
     console.log('Handling fetch event for', event.request.url);
 
     event.respondWith(
