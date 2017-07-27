@@ -248,6 +248,7 @@
     );
 
   window.addEventListener('load', function(event) {
+
     var expectedCacheNames = Object.keys(CURRENT_CACHES).map(function(key) {
       return CURRENT_CACHES[key];
     });
@@ -267,6 +268,7 @@
         );
       })
     );
+
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || isLocalhost)) {
       navigator.serviceWorker.register('service-worker.js')
       .then(function(registration) {
