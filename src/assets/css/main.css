@@ -1,5 +1,2 @@
 @import './typography.css';
-@import './vue-material.css';
-@import './material-design-icons.css';
-@import './roboto-font.css';
-/* @import '../../../node_modules/vue-material/dist/vue-material.css'; */
+@import '../../../node_modules/vue-material/dist/vue-material.css';

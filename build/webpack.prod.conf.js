@@ -11,8 +11,8 @@ var
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   ExtractTextPlugin = require('extract-text-webpack-plugin'),
   OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin'),
-  SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin'),
-  PurifyCSSPlugin = require('purifycss-webpack');
+  SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+  // PurifyCSSPlugin = require('purifycss-webpack');
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -63,10 +63,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),
-    new PurifyCSSPlugin({
-      // Give paths to parse for rules. These should be absolute!
-      paths: glob.sync(path.join(__dirname, '../*.html')),
-    }),
+    // new PurifyCSSPlugin({
+    //   // Give paths to parse for rules. These should be absolute!
+    //   paths: glob.sync(path.join(__dirname, '../*.html')),
+    // }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({

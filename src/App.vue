@@ -12,9 +12,9 @@
   };
 </script>
 
-<style>
-  @import './assets/css/main.css';
+<style src="./assets/css/main.css"></style>
 
+<style>
   .slide-fade-enter-active {
     transition: all .2s ease;
   }
